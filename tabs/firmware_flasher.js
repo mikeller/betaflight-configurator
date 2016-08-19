@@ -1,7 +1,7 @@
 'use strict';
 
 TABS.firmware_flasher = {
-    releases: null,
+    releases: null
 };
 
 TABS.firmware_flasher.initialize = function (callback) {
@@ -100,7 +100,7 @@ TABS.firmware_flasher.initialize = function (callback) {
             var selectTargets = [];
             Object.keys(releases)
                 .sort()
-                .forEach(function(target, i) {
+                .forEach(function (target) {
                     var descriptors = releases[target];
                     descriptors.forEach(function(descriptor){
                         if($.inArray(target, selectTargets) == -1) {
@@ -114,8 +114,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                     });
                 });
             TABS.firmware_flasher.releases = releases;
-        };
-
+        }
         function loadReleaseData() {
             chrome.storage.local.get(['releaseDataLastUpdate', 'releaseData'], function (result) {
                 var releaseDataTimestamp = $.now();
@@ -262,7 +261,7 @@ TABS.firmware_flasher.initialize = function (callback) {
             }
         });
 
-        $('a.load_remote_file').click(function (evt) {
+        $('a.load_remote_file').click(function () {
 
             if ($('select[name="firmware_version"]').val() == "0") {
                 GUI.log("<b>No firmware selected to load</b>");
@@ -276,8 +275,6 @@ TABS.firmware_flasher.initialize = function (callback) {
                     parsed_hex = data;
 
                     if (parsed_hex) {
-                        var url;
-
                         $('span.progressLabel').html('<a class="save_firmware" href="#" title="Save Firmware">Loaded Online Firmware: (' + parsed_hex.bytes_total + ' bytes)</a>');
 
                         $('a.flash_firmware').removeClass('disabled');
@@ -403,7 +400,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                                         truncated = true;
                                         writer.truncate(blob.size);
 
-                                        return;
+
                                     }
                                 };
 
@@ -481,36 +478,7 @@ TABS.firmware_flasher.initialize = function (callback) {
             }
 
             $('input.flash_on_connect').change(function () {
-                var status = $(this).is(':checked');
-
-                if (status) {
-                    var catch_new_port = function () {
-                        PortHandler.port_detected('flash_detected_device', function (result) {
-                            var port = result[0];
-
-                            if (!GUI.connect_lock) {
-                                GUI.log('Detected: <strong>' + port + '</strong> - triggering flash on connect');
-                                console.log('Detected: ' + port + ' - triggering flash on connect');
-
-                                // Trigger regular Flashing sequence
-                                GUI.timeout_add('initialization_timeout', function () {
-                                    $('a.flash_firmware').click();
-                                }, 100); // timeout so bus have time to initialize after being detected by the system
-                            } else {
-                                GUI.log('Detected <strong>' + port + '</strong> - previous device still flashing, please replug to try again');
-                            }
-
-                            // Since current port_detected request was consumed, create new one
-                            catch_new_port();
-                        }, false, true);
-                    };
-
-                    catch_new_port();
-                } else {
-                    PortHandler.flush_callbacks();
-                }
-
-                chrome.storage.local.set({'flash_on_connect': status});
+                chrome.storage.local.set({'flash_on_connect': $(this).is(':checked')});
             }).change();
         });
 
@@ -520,6 +488,8 @@ TABS.firmware_flasher.initialize = function (callback) {
             } else {
                 $('input.erase_chip').prop('checked', false);
             }
+
+            self.watchPort();
 
             $('input.erase_chip').change(function () {
                 chrome.storage.local.set({'erase_chip': $(this).is(':checked')});
@@ -549,6 +519,34 @@ TABS.firmware_flasher.initialize = function (callback) {
 
         GUI.content_ready(callback);
     });
+};
+
+TABS.firmware_flasher.watchPort = function () {
+    var self = this;
+
+    PortHandler.port_detected('flash_detected_device', function (result) {
+        var port = result[0];
+
+        if (!GUI.connect_lock) {
+            GUI.log('Detected: <strong>' + port + '</strong>');
+            console.log('Detected: ' + port);
+            if ($('input.flash_on_connect').is(':checked')) {
+                GUI.log('Triggering flash on connect');
+                console.log('Triggering flash on connect');
+
+                // Trigger regular Flashing sequence
+                GUI.timeout_add('initialization_timeout', function () {
+                    $('a.flash_firmware').click();
+                }, 100); // timeout so bus have time to initialize after being detected by the system
+            } else {
+                GUI.log('Detecting board version');
+            }
+        } else {
+            GUI.log('Detected <strong>' + port + '</strong> - currently busy');
+        }
+
+        self.watchPort();
+    }, false, true);
 };
 
 TABS.firmware_flasher.cleanup = function (callback) {
