@@ -517,6 +517,9 @@
     "featureRX_MSP": {
         "message": "MSP RX input (control via MSP port)"
     },
+    "featureRX_SPI": {
+        "message": "RX connected via SPI bus"
+    },
     "featureRSSI_ADC": {
         "message": "Analog RSSI input"
     },
