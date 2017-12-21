@@ -13,6 +13,7 @@ var NwBuilder = require('nw-builder');
 var gulp = require('gulp');
 var concat = require('gulp-concat');
 var install = require("gulp-install");
+var rename = require("gulp-rename");
 var runSequence = require('run-sequence');
 var os = require('os');
 
@@ -269,9 +270,16 @@ gulp.task('dist', ['clean-dist'], function () {
         './resources/*.json',
         './resources/models/*',
         './resources/osd/*.mcm',
-        './resources/motor_order/*.svg',
+        './resources/motor_order/*.svg'
+
+        // New location sources
+        //'./src/<file name>'
     ];
-    return gulp.src(distSources, { base: '.' })
+
+    return gulp.src(distSources, { base: './' })
+	.pipe(rename(function(path) {
+            path.dirname = path.dirname.replace(/^src\/?/, '');
+        }))
         .pipe(gulp.dest(distDir))
         .pipe(install({
             npm: '--production --ignore-scripts'
@@ -292,6 +300,7 @@ gulp.task('apps', ['dist', 'clean-apps'], function (done) {
         macPlist: { 'CFBundleDisplayName': 'Betaflight Configurator'},
         winIco: './images/bf_icon.ico',
     });
+
     builder.on('log', console.log);
     builder.build(function (err) {
         if (err) {
@@ -300,6 +309,10 @@ gulp.task('apps', ['dist', 'clean-apps'], function (done) {
                 process.exit(1);
             });
         }
+
+        gulp.src('**/*', { base: './shortcuts' })
+            .pipe(gulp.dest(appsDir));
+
         done();
     });
 });
