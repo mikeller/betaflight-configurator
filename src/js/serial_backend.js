@@ -258,6 +258,15 @@ function onOpen(openInfo) {
                                     updateStatusBarVersion(CONFIG.flightControllerVersion, CONFIG.flightControllerIdentifier, FC.getHardwareName());
                                     updateTopBarVersion(CONFIG.flightControllerVersion, CONFIG.flightControllerIdentifier, FC.getHardwareName());
 
+                                    if (bit_check(CONFIG.targetCapabilities, FC.TARGET_CAPABILITIES_FLAGS.SUPPORTS_CUSTOM_DEFAULTS)) {
+                                        console.log('Supports custom defaults.');
+                                        if (bit_check(CONFIG.targetCapabilities, FC.TARGET_CAPABILITIES_FLAGS.HAS_CUSTOM_DEFAULTS)) {
+                                            console.log('Has custom defaults.');
+                                        }
+                                    }
+
+                                    console.log(`Configuration state: ${CONFIG.configurationState}`);
+
                                     MSP.send_message(MSPCodes.MSP_UID, false, false, function () {
                                         var uniqueDeviceIdentifier = CONFIG.uid[0].toString(16) + CONFIG.uid[1].toString(16) + CONFIG.uid[2].toString(16);
 
