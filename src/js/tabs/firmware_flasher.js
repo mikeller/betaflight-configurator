@@ -877,6 +877,7 @@ TABS.firmware_flasher.initialize = function (callback) {
                                     clearBufferedFirmware();
                                     try {
                                         self.unifiedTarget.config = cleanUnifiedConfigFile(e.target.result);
+                                        self.unifiedTarget.config = self.injectTargetInfo(cleanUnifiedConfigFile(e.target.result), target, manufacturerId, commitInfo);
                                         self.unifiedTarget.fileName = file.name;
                                         self.isConfigLocal = true;
                                         flashingMessageLocal();
