@@ -402,7 +402,7 @@
         "message": "Firmware bertsio hau <span class=\"message-negative\">EZ dago onartua</span>. Mezedez firmwarea eguneratu, API bertsioa <strong>$1</strong> edo berriagora. CLI-a erabili backupa egiteko flasheatu aurretik. CLI backupa gorde edo beripintzeko modua dokumentazioan aurkitu dezakezu.<br />Baita ere Konfiguratzailearen aurreko bertsio bat dezkargatu eta erabili dezakezu ezin baduzu edo ez bazaude eguneratzeko prest."
     },
     "firmwareTypeNotSupported": {
-        "message": "Cleanflight/Betaflight-EZ firmwareak <span class=\"message-negative\">ez dira onartzen</span>, CLI moduan ez bada."
+        "message": "Betaflight-EZ firmwareak <span class=\"message-negative\">ez dira onartzen</span>, CLI moduan ez bada."
     },
     "firmwareUpgradeRequired": {
         "message": "Firmware bertsio hau EZ dago onartua. Mezedez firmwarea eguneratu, API bertsioa edo berriagora. CLI-a erabili backupa egiteko flasheatu aurretik. CLI backupa gorde edo beripintzeko modua dokumentazioan aurkitu dezakezu. <br/>Baita ere Konfiguratzailearen aurreko bertsio bat dezkargatu eta erabili dezakezu ezin baduzu edo ez bazaude eguneratzeko prest."

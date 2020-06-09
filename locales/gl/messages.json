@@ -486,7 +486,7 @@
         "message": "Esta versión de firmware <span class=\"message-negative\">non está soportada</span>. Por favor actualice a un firmware que soporte a versión de api <strong>$1</strong> ou superior. Empregue o CLI para facer un backup antes de flashear. O procedemento CLI de backup/recuperación atópase na documentación.<br />Se o prefire tamén pode descargar e usar unha versión antigua do configurador se non desexa actualizar."
     },
     "firmwareTypeNotSupported": {
-        "message": "Un firmware que non sexa Cleanflight/Betaflight <span class=\"message-negative\">non está soportado</span>, agás para o modo CLI."
+        "message": "Un firmware que non sexa Betaflight <span class=\"message-negative\">non está soportado</span>, agás para o modo CLI."
     },
     "firmwareUpgradeRequired": {
         "message": "O firmware neste dispositivo necesita actualización a unha nova versión. Empregue o CLI para backup antes de flashear. O procedemento CLI de backup/recuperación atópase na documentación.<br />Se o prefire tamén pode descargar e usar unha versión antigua do configurador se non desexa actualizar."
