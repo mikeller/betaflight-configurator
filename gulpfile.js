@@ -588,20 +588,28 @@ function release_win(arch, appDirectory, done) {
     const parameters = [];
 
     // Extra parameters to replace inside the iss file
-    parameters.push(`/Dversion=${pkg.version}`);
-    parameters.push(`/DarchName=${arch}`);
-    parameters.push(`/DarchAllowed=${(arch === 'win32') ? 'x86 x64' : 'x64'}`);
-    parameters.push(`/DarchInstallIn64bit=${(arch === 'win32') ? '' : 'x64'}`);
-    parameters.push(`/DsourceFolder=${appDirectory}`);
-    parameters.push(`/DtargetFolder=${RELEASE_DIR}`);
+    //parameters.push(`/Dversion=${pkg.version}`);
+    //parameters.push(`/DarchName=${arch}`);
+    //parameters.push(`/DarchAllowed=${(arch === 'win32') ? 'x86 x64' : 'x64'}`);
+    //parameters.push(`/DarchInstallIn64bit=${(arch === 'win32') ? '' : 'x64'}`);
+    //parameters.push(`/DsourceFolder=${appDirectory}`);
+    //parameters.push(`/DtargetFolder=${RELEASE_DIR}`);
 
     // Show only errors in console
-    parameters.push(`/Q`);
+    //parameters.push(`/Q`);
 
     // Script file to execute
     parameters.push("assets/windows/installer.iss");
 
-    innoSetup(parameters, {},
+    innoSetup(parameters, {
+		gui: false,
+		Dversion: pkg.version,
+		DarchName: arch,
+		DarchAllowed: (arch === 'win32') ? 'x86 x64' : 'x64',
+		DarchInstallIn64bit: (arch === 'win32') ? '' : 'x64',
+		DsourceFolder: appDirectory,
+		DtargetFolder: RELEASE_DIR
+	},
     function(error) {
         if (error != null) {
             console.error(`Installer for platform ${arch} finished with error ${error}`);
